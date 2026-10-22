@@ -146,6 +146,10 @@ They also run on GitHub Actions for every push, on PHP 7.4 and 8.4.
 
 - First version: a script with a hard-coded folder that resized images to 500 × 500 with ImageMagick
 
+## License
+
+Released under the [MIT License](LICENSE).
+
 ## Author
 
 **Bhavanaditya D R** · [bhavanaditya.com](https://www.bhavanaditya.com/) · [LinkedIn](https://www.linkedin.com/in/drbhavanaditya/)
