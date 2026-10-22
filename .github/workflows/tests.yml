@@ -31,3 +31,15 @@ jobs:
 
       - name: Test with ImageMagick
         run: php tests/run.php magick
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test the web app's sizing and naming rules
+        run: node --test tests/web.test.mjs
+      - name: Check the web app's JavaScript
+        run: node --check web/app.js

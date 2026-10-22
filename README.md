@@ -2,11 +2,31 @@
 
 [![Tests](https://github.com/bhavanaditya/image-resize/actions/workflows/tests.yml/badge.svg)](https://github.com/bhavanaditya/image-resize/actions/workflows/tests.yml)
 
-A small command-line PHP script that resizes every image in a folder, including subfolders, in one go.
+Resize a whole batch of images in one go: every image is scaled down to fit a maximum size, keeping its shape.
 
 I use it to shrink large photo dumps before uploading them to WordPress or HubSpot, so pages load faster and the media library stays light.
 
-## Features
+It comes in two forms:
+
+- **[Web app](https://bhavanaditya.github.io/image-resize/)**: nothing to install. Works on any device, and your images never leave it.
+- **PHP command-line tool**: for whole folder trees on a computer or server, with ImageMagick or GD.
+
+## Web app
+
+Open **[bhavanaditya.github.io/image-resize](https://bhavanaditya.github.io/image-resize/)**, choose images or a folder (or drag them in), pick a size and click **Resize**.
+
+- Size presets for thumbnails (500 px), social media (1080 px), websites (1600 px) and high quality (2048 px), or type your own, like `800x600`
+- Save as JPG, WebP or PNG, or keep each image's format, with a quality slider
+- Shows the size of every image before and after, and how much you saved in total
+- **Save to a folder** in Chrome and Edge on a computer, or **download a ZIP** in any browser
+- Folders keep their structure, transparent images get a white background in JPG, and phone photos are turned upright
+- Location and camera details are removed from the saved images
+
+Everything runs in your browser. Images are not uploaded anywhere.
+
+## Command-line tool
+
+### Features
 
 - Resizes a whole folder tree in one command and mirrors the folder structure in the output
 - Keeps the aspect ratio and only ever shrinks images, never enlarges them
@@ -19,7 +39,7 @@ I use it to shrink large photo dumps before uploading them to WordPress or HubSp
 - Uses ImageMagick when it's installed and falls back to PHP's built-in GD extension
 - Dry-run mode, so you can see what will happen first
 
-## Requirements
+### Requirements
 
 - PHP 7.4 or newer
 - One of:
@@ -34,7 +54,7 @@ php -m | grep -i gd
 magick -version    # or: convert -version
 ```
 
-## Installation
+### Installation
 
 Clone the repository, or just download `image_resize.php`. It's a single file with no dependencies.
 
@@ -43,7 +63,7 @@ git clone https://github.com/bhavanaditya/image-resize.git
 cd image-resize
 ```
 
-## Usage
+### Usage
 
 ```bash
 php image_resize.php <source-folder> [options]
@@ -51,7 +71,7 @@ php image_resize.php <source-folder> [options]
 
 By default, images are resized to fit within 500 × 500 pixels, saved as JPG at quality 85, and written to a new folder next to the source called `<source>-resized`.
 
-### Options
+#### Options
 
 | Option | Description | Default |
 | --- | --- | --- |
@@ -67,7 +87,7 @@ By default, images are resized to fit within 500 × 500 pixels, saved as JPG at 
 
 Options can go before or after the source folder.
 
-### Examples
+#### Examples
 
 Resize a folder using the defaults:
 
@@ -107,7 +127,7 @@ Output: /Users/me/photos-resized
 Done: 2 resized, 1 skipped, 0 failed.
 ```
 
-## How it works
+### How it works
 
 - **Sizing:** every image is scaled to fit inside the box you give. A 1200 × 800 photo with `--size 500x500` becomes 500 × 333. Images that are already smaller are kept at their size (but still converted and recompressed).
 - **File names:** each output file keeps its name and changes only its extension. If two files would end up with the same name, for example `photo.png` and `photo.jpg` both becoming `photo.jpg`, the second one is saved as `photo-png.jpg`, so nothing gets lost.
@@ -115,7 +135,7 @@ Done: 2 resized, 1 skipped, 0 failed.
 - **Animated GIFs and multi-page TIFFs:** only the first frame is kept.
 - **Exit codes:** `0` if everything went fine, `1` if any image failed, `2` if the options were invalid.
 
-### Supported formats
+#### Supported formats
 
 | Engine | Reads | Writes |
 | --- | --- | --- |
@@ -131,9 +151,19 @@ php tests/run.php gd
 php tests/run.php magick
 ```
 
-They also run on GitHub Actions for every push, on PHP 7.4 and 8.4.
+The web app's sizing and naming rules have their own tests:
+
+```bash
+node --test tests/web.test.mjs
+```
+
+They all run on GitHub Actions for every push. The web app is published to GitHub Pages from the `web` folder whenever `master` changes; to try it locally, serve that folder, for example with `npx serve web`.
 
 ## Changelog
+
+### 2.1.0
+
+- Added the web app: resize, convert and compress images in the browser, with presets, before and after sizes, save to a folder or download a ZIP
 
 ### 2.0.0
 
